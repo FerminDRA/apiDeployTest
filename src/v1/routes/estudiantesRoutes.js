@@ -3,6 +3,7 @@ const router=express.Router();
 const estudiantesController= require("../../controllers/estudiantesController")
 
 router
+    .get('/',estudiantesController.getAllStudents)
     .get('/',estudiantesController.getOneStudent)
     .post('/',estudiantesController.createStudent)
     .patch('/:studentId',estudiantesController.updateStudent)
