@@ -18,6 +18,7 @@ jobs:
         with:
           envkey_DEV_DATABASE_URL : ${{ secrets.DEV_DATABASE_URL }}
           envkey_JWT_SECRET : ${{ secrets.JWT_SECRET }}
+          envkey_PORT : ${{secrets.PORT}}
           file_name: .env
           fail_on_empty: false
       

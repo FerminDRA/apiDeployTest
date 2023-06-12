@@ -1,10 +1,11 @@
 const { Pool } = require('pg');
+require('dotenv').config();
 
 const pool = new Pool({
-  user: 'pymzmebf',
+  user: 'oeskxblm',
   host: 'hansken.db.elephantsql.com',
-  database: 'pymzmebf',
-  password: 'pGDnX902kptn9b7o02krb3N8OhTgwKPB',
+  database: 'oeskxblm',
+  password: 'LNwSS0CqjtKQCw7mDSnHOzTTCuJ__BUp',
   port: 5432,
 });
 
@@ -69,17 +70,56 @@ const deleteStudent = async (id) => {
 const verificarCuenta=async(cuenta)=>{
   try {
     const {correo,contrasena}=cuenta;
-    const res=await pool.query("SELECT id FROM cuentas_alumno WHERE correo = $1 AND contrasena = $2 ",[correo,contrasena]);
+    const res=await pool.query("SELECT matricula FROM cuentas_alumno WHERE correo = $1 AND contrasena = $2 ",[correo,contrasena]);
     return res.rows;
   } catch (error) {
     throw error;
   }
 }
+
+const materias=async(id)=>{
+  try {
+    //const {correo,contrasena}=cuenta;
+    const res=await pool.query("select nrc from alumnos_materias where matricula=$1; ",[id]);
+    return res.rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+const obtenerMaterias=async(id)=>{
+  try {
+    //const {correo,contrasena}=cuenta;
+    const res=await pool.query("select * from materias where nrc=$1; ",[id]);
+    return res.rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+const createCuenta=async(cuenta)=>{
+  try {
+    const {matricula,correo,contrasena,url_imagen}=cuenta;
+    const result = await pool.query('SELECT * FROM alumnos WHERE matricula = $1', [matricula]);
+    if (result.rows.length === 0) {
+      return 'No se encontró la matrícula';
+    } else {
+      await pool.query('INSERT INTO cuentas_alumno VALUES ($1, $2, $3, $4);', [matricula, correo, contrasena, url_imagen]);
+      return 'Cuenta creada exitosamente';
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   getAllStudents,
   getOneStudent,
   createStudent,
   updateStudent,
   deleteStudent,
-  verificarCuenta
+  verificarCuenta,
+  obtenerMaterias,
+  materias,
+  createCuenta
 };
